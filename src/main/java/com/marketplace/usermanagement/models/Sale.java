@@ -18,8 +18,7 @@ public class Sale {
     BigDecimal totalAmount;
     String status;
     String trackingId;
-    @OneToOne
-    User buyer;
+    String buyerId;
     Date createdAt;
     Date updatedAt;
 }

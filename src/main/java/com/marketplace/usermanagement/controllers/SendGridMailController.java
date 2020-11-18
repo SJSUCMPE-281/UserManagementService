@@ -24,9 +24,9 @@ public class SendGridMailController {
     public SendGridMailController(EmailService emailService) {
         this.emailService = emailService;
     }
-	
-	@PostMapping
-	public void sendEmail(@RequestBody Sale sale) throws IOException {
-		emailService.sendEmail(sale);
-	}
+
+//	@PostMapping
+//	public void sendEmail(@RequestBody Sale sale) throws IOException {
+//		emailService.sendEmail(sale);
+//	}
 }

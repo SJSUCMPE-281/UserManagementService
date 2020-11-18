@@ -1,5 +1,6 @@
 package com.marketplace.usermanagement.controllers;
 
+import com.marketplace.usermanagement.models.PaymentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,17 +19,17 @@ import com.stripe.exception.StripeException;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value = "/payment", method = { RequestMethod.GET, RequestMethod.POST })
+@RequestMapping("/api/payment")
 public class PaymentController {
 	
 	@Autowired
-	PaymentService service;
+	PaymentService paymentService;
 
 	@PostMapping
-	public ResponseEntity<String> completePayment(@RequestBody Sale sale) throws StripeException {
-		String chargeId= service.charge(sale);
+	public ResponseEntity<String> completePayment(@RequestBody PaymentRequest request) throws StripeException {
+		String chargeId= paymentService.charge(request);
 		return chargeId!=null? new ResponseEntity<String>(chargeId,HttpStatus.OK):
-			new ResponseEntity<String>("Please check the credit card details entered",HttpStatus.BAD_REQUEST);
+				new ResponseEntity<String>("Please check the credit card details entered",HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler

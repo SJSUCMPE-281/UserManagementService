@@ -14,15 +14,12 @@ import com.marketplace.usermanagement.services.SmsService;
 @RestController
 @RequestMapping("api/v1/sms")
 public class SmsController {
-	private final SmsService service;
 
-	@Autowired
-    public SmsController(SmsService service) {
-        this.service = service;
-    }
+    @Autowired
+	SmsService smsService;
 
-	@PostMapping
-	public void sendSms(@RequestBody Sale sale) {
-		service.sendSms(sale);
-	}
+//	@PostMapping
+//	public void sendSms(){
+//		smsService.sendSMS();
+//	}
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import com.marketplace.usermanagement.models.PaymentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,28 +23,17 @@ public class PaymentService {
 	@Value("${stripe.secret.key}")
 	private String secretKey;
 	
-	public enum Currency{
-		INR,USD;
-	}
-	private Token token;
-	
     @PostConstruct
     public void init() {
         Stripe.apiKey = secretKey;
     }
-	public String charge(Sale sale) throws StripeException {
-		
-		 Map<String, Object> chargeParams = new HashMap<>();
-		 chargeParams.put("amount", sale.getTotalAmount());
-		 chargeParams.put("email",sale.getBuyer().getEmail());
-		 chargeParams.put("firstname", sale.getBuyer().getFirstName());
-		 chargeParams.put("currency", Currency.USD);
-		 chargeParams.put("source", token.getId());
-		 
-	    /* chargeParams.put("amount", chargeRequest.getAmount());
-	     chargeParams.put("currency", PaymentRequest.Currency.USD);
-	     chargeParams.put("source", chargeRequest.getToken().getId());*/
-	     
+
+	public String charge(PaymentRequest chargeRequest) throws StripeException {
+		Map<String, Object> chargeParams = new HashMap<>();
+		chargeParams.put("amount", chargeRequest.getAmount());
+		chargeParams.put("currency", "USD");
+		chargeParams.put("source", chargeRequest.getToken().getId());
+
 		Charge charge = Charge.create(chargeParams);
 		return charge.getId();
 	}
