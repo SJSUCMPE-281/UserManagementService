@@ -11,6 +11,7 @@ public class SendGridConfig {
 	
 	@Value("${sendgrid.api.key}")
 	private String appKey;
+
 	@Bean
 	public SendGrid getSendGrid() {
 		return new SendGrid(appKey);

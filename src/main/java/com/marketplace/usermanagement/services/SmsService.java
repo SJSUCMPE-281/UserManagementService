@@ -8,6 +8,8 @@ import com.twilio.type.PhoneNumber;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+
 @Service
 public class SmsService {
 
@@ -18,19 +20,21 @@ public class SmsService {
     @Value("${trial_number}")
     private String trialNumber;
 
-    public SmsService() {
+    @PostConstruct
+    public void initialize() {
         Twilio.init(accountSid,authToken);
     }
 
     public void sendTextMessage(Sale sale, User user) {
-            String phone = user.getPhoneNumber();
-            String message = getMessageContent(sale,user);
-            Message.creator(
-                    //phone will go here
-                    new PhoneNumber("+19546817052"),
-                    new PhoneNumber(trialNumber),getMessageContent(sale,user)
-                    )
-                    .create();
+
+        String phone = user.getPhoneNumber();
+        String message = getMessageContent(sale,user);
+        Message.creator(
+                //phone will go here
+                new PhoneNumber("+19546817052"),
+                new PhoneNumber(trialNumber),getMessageContent(sale,user)
+                )
+                .create();
     }
 
     public String getMessageContent(Sale sale, User user) {

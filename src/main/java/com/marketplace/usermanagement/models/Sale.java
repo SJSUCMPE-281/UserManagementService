@@ -12,7 +12,7 @@ import java.util.List;
 public class Sale {
     String orderId;
     @OneToMany
-    List<OrderDetails> orderDetails;
+    List<OrderDetails> orderDetailsDTO;
     BigDecimal totalPrice;
     BigDecimal taxAmount;
     BigDecimal totalAmount;

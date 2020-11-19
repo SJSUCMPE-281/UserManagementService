@@ -28,14 +28,13 @@ public class PaymentService {
         Stripe.apiKey = secretKey;
     }
 
-	public String charge(PaymentRequest chargeRequest) throws StripeException {
+	public Charge charge(PaymentRequest chargeRequest) throws StripeException {
 		Map<String, Object> chargeParams = new HashMap<>();
 		chargeParams.put("amount", chargeRequest.getAmount());
 		chargeParams.put("currency", "USD");
 		chargeParams.put("source", chargeRequest.getToken().getId());
-
 		Charge charge = Charge.create(chargeParams);
-		return charge.getId();
+		return charge;
 	}
 
 }

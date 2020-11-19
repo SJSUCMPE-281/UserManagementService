@@ -83,7 +83,7 @@ public class EmailService {
 		String firstName = user.getFirstName();
     	String lastName = user.getLastName();
     	BigDecimal totalAmount = sale.getTotalAmount();
-    	List<OrderDetails> orderDetails = sale.getOrderDetails();
+    	List<OrderDetails> orderDetails = sale.getOrderDetailsDTO();
     	for(OrderDetails order : orderDetails) {
     		String productName = order.getProductName();
     		String productDescription = order.getProductDescription();

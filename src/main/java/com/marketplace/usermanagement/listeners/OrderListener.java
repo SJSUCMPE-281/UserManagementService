@@ -29,7 +29,7 @@ public class OrderListener {
 		Sale sale = objectMapper.readValue(message,Sale.class);
 		String buyerId = sale.getBuyerId();
 		User buyer = orderService.getUser(buyerId);
-		String sellerId = sale.getOrderDetails().get(0).getSellerId();
+		String sellerId = sale.getOrderDetailsDTO().get(0).getSellerId();
 		User seller = orderService.getUser(sellerId);
 		smsService.sendTextMessage(sale,buyer);
 		smsService.sendTextMessage(sale,seller);
