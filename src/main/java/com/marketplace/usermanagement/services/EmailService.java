@@ -30,7 +30,7 @@ public class EmailService {
 
 	public void sendHTML(Sale sale, User user) {
 		String fromEmail = "anisha.agarwal@sjsu.edu";
-		String toEmail = "jeenathampi.23@gmail.com";
+		String toEmail = user.getEmail();
 		String subject = "Order has been placed for "+sale.getTotalAmount();
 		String body = "Order has been placed with order id: "+sale.getOrderId();
 		Response response = sendEmail(fromEmail, toEmail, subject, new Content("text/html", body));
