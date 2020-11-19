@@ -26,12 +26,8 @@ public class PaymentController {
 	}
 
 	@PostMapping
-	public Charge completePayment(@RequestBody PaymentRequest request) throws StripeException {
-		return paymentService.charge(request);
-	}
-	
-	@ExceptionHandler
-	public String handleError(StripeException ex) {
-		return ex.getMessage();
+	public String completePayment(@RequestBody PaymentRequest request) throws StripeException {
+		Charge charge =  paymentService.charge(request);
+		return  charge.toJson();
 	}
 }

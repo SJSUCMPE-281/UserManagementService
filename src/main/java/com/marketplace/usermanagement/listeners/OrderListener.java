@@ -1,6 +1,7 @@
 package com.marketplace.usermanagement.listeners;
 
 import com.marketplace.usermanagement.models.User;
+import com.marketplace.usermanagement.services.EmailService;
 import com.marketplace.usermanagement.services.SmsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.aws.messaging.listener.annotation.SqsListener;
@@ -22,6 +23,9 @@ public class OrderListener {
 	@Autowired
 	SmsService smsService;
 
+	@Autowired
+	EmailService emailService;
+
 	static final String QUEUE_NAME = "marketplace-order-save-queue";
 
 	@SqsListener(QUEUE_NAME)
@@ -31,7 +35,8 @@ public class OrderListener {
 		User buyer = orderService.getUser(buyerId);
 		String sellerId = sale.getOrderDetailsDTO().get(0).getSellerId();
 		User seller = orderService.getUser(sellerId);
-		smsService.sendTextMessage(sale,buyer);
-		smsService.sendTextMessage(sale,seller);
+//		smsService.sendTextMessage(sale,buyer);
+//		smsService.sendTextMessage(sale,seller);
+		emailService.sendHTML(sale,buyer);
 	}
 }
