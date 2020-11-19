@@ -5,14 +5,18 @@ import com.marketplace.usermanagement.models.User;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SmsService {
 
-    private static final String accountSid="ACa5e1567174af796f7c15b8f557037fdb";
-    private static final String authToken="faee8eb598dd07d06c4db256b4e1eed2";
-    private static final String trialNumber="+12184838293";
+    @Value("${twilio.account.id}")
+    private String accountSid;
+    @Value("${twilio.auth.token}")
+    private String authToken;
+    @Value("${trial_number}")
+    private String trialNumber;
 
     public SmsService() {
         Twilio.init(accountSid,authToken);
