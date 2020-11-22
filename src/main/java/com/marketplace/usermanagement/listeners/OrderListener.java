@@ -30,6 +30,7 @@ public class OrderListener {
 
 	@SqsListener(QUEUE_NAME)
 	public void receiveMessage(String message) throws JsonProcessingException {
+		System.out.println(message);
 		Sale sale = objectMapper.readValue(message,Sale.class);
 		String buyerId = sale.getBuyerId();
 		User buyer = orderService.getUser(buyerId);
