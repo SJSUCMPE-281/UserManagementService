@@ -8,7 +8,7 @@ import com.sendgrid.SendGrid;
 
 @Configuration
 public class SendGridConfig {
-	
+
 	@Value("${sendgrid.api.key}")
 	private String appKey;
 

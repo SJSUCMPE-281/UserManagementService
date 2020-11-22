@@ -35,8 +35,10 @@ public class OrderListener {
 		User buyer = orderService.getUser(buyerId);
 		String sellerId = sale.getOrderDetailsDTO().get(0).getSellerId();
 		User seller = orderService.getUser(sellerId);
+		//Send e-email and text message to both seller and buyer
 		smsService.sendTextMessage(sale,buyer);
 		smsService.sendTextMessage(sale,seller);
 		emailService.sendHTML(sale,buyer);
+		emailService.sendHTML(sale,seller);
 	}
 }

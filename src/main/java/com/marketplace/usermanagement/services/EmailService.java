@@ -1,46 +1,50 @@
 package com.marketplace.usermanagement.services;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.List;
 
+import com.marketplace.usermanagement.mappers.OrderMapper;
+import com.marketplace.usermanagement.models.Order;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
 import com.sendgrid.helpers.mail.Mail;
-import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
+import com.sendgrid.helpers.mail.objects.Personalization;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.marketplace.usermanagement.models.OrderDetails;
 import com.marketplace.usermanagement.models.Sale;
 import com.marketplace.usermanagement.models.User;
 import com.sendgrid.SendGrid;
 
 @Service
+@Slf4j
 public class EmailService {
+
+	@Value("${sendgrid.templateid.key}")
+	private String templateId;
 
 	private SendGrid sendGrid;
 
+	private OrderMapper orderMapper;
+
+	private final String FROM_ADDRESS = "jeenathampi1023@gmail.com";
+
 	@Autowired
-	public EmailService(SendGrid sendGrid) {
+	public EmailService(SendGrid sendGrid, OrderMapper orderMapper) {
 		this.sendGrid = sendGrid;
+		this.orderMapper = orderMapper;
 	}
 
 	public void sendHTML(Sale sale, User user) {
-		String fromEmail = "anisha.agarwal@sjsu.edu";
-		String toEmail = "jeenathampi.23@gmail.com";
-		String subject = "Order has been placed for "+sale.getTotalAmount();
-		String body = "Order has been placed with order id: "+sale.getOrderId();
-		Response response = sendEmail(fromEmail, toEmail, subject, new Content("text/html", body));
-		System.out.println("Status Code: " + response.getStatusCode() + ", Body: " + body + ", Headers: "
-				+ response.getHeaders());
+		Order newOrder = orderMapper.toOrder(sale);
+		Response response = sendEmail(newOrder, user);
 	}
 
-	private Response sendEmail(String from, String to, String subject, Content content) {
-		Mail mail = new Mail(new Email(from), subject, new Email(to), content);
-		//mail.setReplyTo(new Email("jeenathampi.23@gmail.com"));
+	private Response sendEmail(Order order, User user) {
+		Mail mail = getMailData(order, user);
 		Request request = new Request();
 		Response response = null;
 		try {
@@ -49,31 +53,23 @@ public class EmailService {
 			request.setBody(mail.build());
 			response = this.sendGrid.api(request);
 		} catch (IOException ex) {
-			System.out.println(ex.getMessage());
+			log.info("Exception happened while sending mail, error={}",
+					ex.getMessage());
 		}
 		return response;
 	}
 
-//	public String createContentForSeller(User user, Sale sale) {
-//		String productDetails = "";
-//		String firstName = user.getFirstName();
-//    	String lastName = user.getLastName();
-//    	BigDecimal totalAmount = sale.getTotalAmount();
-//    	List<OrderDetails> orderDetails = sale.getOrderDetailsDTO();
-//    	for(OrderDetails order : orderDetails) {
-//    		String productName = order.getProductName();
-//    		String productDescription = order.getProductDescription();
-//    		BigDecimal productPrice = order.getPrice();
-//    		String shopName = order.getShopName();
-//    		String URL = order.getImageUrl();
-//    		String category = order.getCategory();
-//    		int quantity = order.getQuantity();
-//    		productDetails = "Product =" + productName + "Description =" + productDescription + "Price =" + productPrice
-//    				+ "Shop Name = " + shopName + "Image = " + URL + "Product Category =" + category + "Quantity =" + quantity;
-//    	}
-//		String message = "Hi" + firstName + lastName + "Your Product has been added Successfully. Please find the details"
-//				+ productDetails;
-//		return message;
-//	}
-	
+	private Mail getMailData(Order order, User user) {
+		Mail mail = new Mail();
+		Email from = new Email(FROM_ADDRESS);
+		Email to = new Email(user.getEmail());
+		mail.setFrom(from);
+		Personalization personalization = new Personalization();
+		personalization.addTo(to);
+		personalization.addDynamicTemplateData("data", order);
+		mail.setTemplateId(templateId);
+		mail.addPersonalization(personalization);
+		return mail;
+	}
+
 }

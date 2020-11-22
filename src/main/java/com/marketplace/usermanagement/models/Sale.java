@@ -13,6 +13,11 @@ public class Sale {
     BigDecimal totalPrice;
     BigDecimal taxAmount;
     BigDecimal totalAmount;
+    String address1;
+    String address2;
+    String city;
+    String state;
+    String zip;
     String status;
     String trackingId;
     String buyerId;
