@@ -45,9 +45,9 @@ public class SmsService {
     public String getMessageContent(Sale sale, User user) {
         String message = " ";
         if(user.getRole().equals("Seller")){
-            message = "Hello, "+user.getFirstName()+" "+user.getLastName()+", Your order has been placed. Please check email for more details.";
-        }else if(user.getRole().equals("Buyer")){
             message = "Hello, "+user.getFirstName()+" "+user.getLastName()+", An order has been placed from your shop.";
+        }else if(user.getRole().equals("Buyer")){
+            message = "Hello, "+user.getFirstName()+" "+user.getLastName()+", Your order has been placed. Please check email for more details.";
         }
         return message;
     }
