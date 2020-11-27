@@ -5,12 +5,14 @@ import com.marketplace.usermanagement.models.User;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 
 @Service
+@Slf4j
 public class SmsService {
 
     @Value("${twilio.account.id}")
@@ -26,15 +28,18 @@ public class SmsService {
     }
 
     public void sendTextMessage(Sale sale, User user) {
-
-        String phone = user.getPhoneNumber();
-        String message = getMessageContent(sale,user);
-        Message.creator(
-                //phone will go here
-                new PhoneNumber(phone),
-                new PhoneNumber(trialNumber),getMessageContent(sale,user)
-                )
-                .create();
+        try {
+            String phone = user.getPhoneNumber();
+            String message = getMessageContent(sale, user);
+            Message.creator(
+                    //phone will go here
+                    new PhoneNumber(phone),
+                    new PhoneNumber(trialNumber), getMessageContent(sale, user)
+            )
+                    .create();
+        } catch (Exception e){
+            log.info("Unable to send message, errorMessage={}", e.getMessage());
+        }
     }
 
     public String getMessageContent(Sale sale, User user) {
