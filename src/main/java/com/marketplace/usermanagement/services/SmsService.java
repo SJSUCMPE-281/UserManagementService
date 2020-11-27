@@ -31,7 +31,7 @@ public class SmsService {
         String message = getMessageContent(sale,user);
         Message.creator(
                 //phone will go here
-                new PhoneNumber("+19546817052"),
+                new PhoneNumber(phone),
                 new PhoneNumber(trialNumber),getMessageContent(sale,user)
                 )
                 .create();
@@ -40,9 +40,9 @@ public class SmsService {
     public String getMessageContent(Sale sale, User user) {
         String message = " ";
         if(user.getRole().equals("Seller")){
-            message = "To seller : Sample message twilio using Spring";
+            message = "Hello, "+user.getFirstName()+" "+user.getLastName()+", Your order has been placed. Please check email for more details.";
         }else if(user.getRole().equals("Buyer")){
-            message = "To buyer: Sample message twilio using Spring";
+            message = "Hello, "+user.getFirstName()+" "+user.getLastName()+", An order has been placed from your shop.";
         }
         return message;
     }
